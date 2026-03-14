@@ -1,7 +1,5 @@
-from langchain.prompts import PromptTemplate, ChatPromptTemplate, MessagesPlaceholder
-from langchain.prompts.chat import SystemMessagePromptTemplate, HumanMessagePromptTemplate
-
-
+from langchain_core.prompts import PromptTemplate, ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.prompts import SystemMessagePromptTemplate, HumanMessagePromptTemplate
 def get_intent_classification_prompt() -> PromptTemplate:
     """
     Get the intent classification prompt template.
@@ -22,9 +20,7 @@ Recent Conversation History:
 {conversation_history}
 
 Analyze the user's request and classify their intent with a confidence score and brief reasoning.
-"""
-    )
-
+""")
 
 # Q&A System Prompt
 QA_SYSTEM_PROMPT = """You are a helpful document assistant specializing in answering questions about financial and healthcare documents.
@@ -41,7 +37,6 @@ Guidelines:
 3. If information is not found, say so clearly
 4. Be precise with numbers and dates
 5. Maintain professional tone
-
 """
 
 # Summarization System Prompt
@@ -61,22 +56,30 @@ Guidelines:
 """
 
 # Calculation System Prompt
-# TODO: Implement the CALCULATION_SYSTEM_PROMPT. Refer to README.md Task 3.2 for details
-CALCULATION_SYSTEM_PROMPT = """"""
+CALCULATION_SYSTEM_PROMPT = """
+Your approach:
+- Analyze the user's request to determine which document is needed, then use the document reader tool
+- Read the retrieved document carefully and identify all numerical values relevant to the user's request
+- Based on the user's input, determine the exact mathematical expression to calculate
+- Use the calculator tool to perform all calculation
 
+Guidelines:
+1. You MUST use the calculator tool for ALL calculations, no matter how simple or obvious the answer may seem
+2. Never perform mental arithmetic or return a calculated result without using the calculator tool first
+3. This includes simple operations like 1 + 1, 10 * 2, or 100 / 4 — always use the calculator tool
+4. Never guess or assume numerical values — always retrieve the document first
+"""
 
-# TODO: Finish the function to return the correct prompt based on intent type
-# Refer to README.md Task 3.1 for details
 def get_chat_prompt_template(intent_type: str) -> ChatPromptTemplate:
     """
     Get the appropriate chat prompt template based on intent.
     """
     if intent_type == "qa":
         system_prompt = QA_SYSTEM_PROMPT
-    elif intent_type ==  # TODO:  Check the intent type value
-        system_prompt =  # TODO: Set system prompt to the correct value based on intent type
-    elif intent_type ==  # TODO: Check the intent type value
-    # TODO: Set system prompt to the correct value based on intent type
+    elif intent_type == "summarization":
+        system_prompt = SUMMARIZATION_SYSTEM_PROMPT
+    elif intent_type == "calculation":
+        system_prompt=CALCULATION_SYSTEM_PROMPT
     else:
         system_prompt = QA_SYSTEM_PROMPT  # Default fallback
 

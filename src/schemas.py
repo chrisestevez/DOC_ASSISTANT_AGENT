@@ -12,13 +12,13 @@ class DocumentChunk(BaseModel):
     relevance_score: float = Field(default=0.0, description="Relevance score for retrieval")
 
 
-# TODO: Implement the AnswerResponse schema for structured Q&A responses.
-# This schema should include fields for the question, answer, sources, confidence, and timestamp.
-# Refer to README.md Task 1.1 for detailed field requirements.
 class AnswerResponse(BaseModel):
-    """Structured response for Q&A tasks - TO BE IMPLEMENTED"""
-    pass
-
+    """Structured response for Q&A tasks"""
+    question: str = Field(description="User Question")
+    answer: str = Field(description="Generated answer")
+    sources: List[str] = Field(description="List of key points extracted")
+    confidence: float = Field(ge=0.0, le=1.0, description="Confidence score between 0 and 1")
+    timestamp: datetime = Field(default_factory=datetime.now, description="Time respomse generated")
 
 
 class SummarizationResponse(BaseModel):
@@ -26,7 +26,7 @@ class SummarizationResponse(BaseModel):
     original_length: int = Field(description="Length of original text")
     summary: str = Field(description="The generated summary")
     key_points: List[str] = Field(description="List of key points extracted")
-    document_ids: List[str] = Field(default_factory=lambda: list, description="Documents summarized")
+    document_ids: List[str] = Field(default_factory=list, description="Documents summarized")
     timestamp: datetime = Field(default_factory=datetime.now)
 
 
@@ -42,22 +42,21 @@ class CalculationResponse(BaseModel):
 class UpdateMemoryResponse(BaseModel):
     """Response after updating memory"""
     summary: str = Field(description="Summary of the conversation up to this point")
-    document_ids: List[str] = Field(default_factory=lambda: list, description="List of documents ids that are relevant to the users last message")
+    document_ids: List[str] = Field(default_factory=list, description="List of documents ids that are relevant to the users last message")
 
 
-# TODO: Implement the UserIntent schema for intent classification.
-# This schema should include fields for intent_type, confidence, and reasoning.
-# Refer to README.md Task 1.2 for detailed field requirements.
 class UserIntent(BaseModel):
-    """User intent classification - TO BE IMPLEMENTED"""
-    pass
+    """User intent classification"""
+    intent_type: Literal["qa", "summarization", "calculation", "unknown"] =Field(description="intent")
+    confidence: float = Field(ge=0.0, le=1.0, description="Confidence score between 0 and 1")
+    reasoning: str = Field(description="Explanation of the classification")
 
 
 class SessionState(BaseModel):
     """Session state"""
     session_id: str
     user_id: str
-    conversation_history: List[TypedDict] = Field(default_factory=lambda: list)
+    conversation_history: List[Dict] = Field(default_factory=lambda: list)
     document_context: List[str] = Field(default_factory=lambda: list, description="Active document IDs")
     created_at: datetime = Field(default_factory=datetime.now)
     last_updated: datetime = Field(default_factory=datetime.now)

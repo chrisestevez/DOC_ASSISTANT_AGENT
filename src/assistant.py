@@ -6,12 +6,10 @@ import uuid
 
 from langchain_core.messages import BaseMessage
 from langchain_openai import ChatOpenAI
-
 from schemas import SessionState
 from retrieval import SimulatedRetriever
 from tools import get_all_tools, ToolLogger
 from agent import create_workflow, AgentState
-from prompts import MEMORY_SUMMARY_PROMPT
 
 
 class DocumentAssistant:
@@ -34,7 +32,6 @@ class DocumentAssistant:
             temperature=temperature,
             base_url="https://openai.vocareum.com/v1"
         )
-
         # Initialize components
         self.retriever = SimulatedRetriever()
         self.tool_logger = ToolLogger(logs_dir="./logs")
@@ -115,14 +112,12 @@ class DocumentAssistant:
 
     def process_message(self, user_input: str) -> Dict[str, Any]:
         """Process a user message using the LangGraph workflow."""
-
-#TODO: Complete the config dictionary to set the thread_ud, llm, and tools to the workflow
-        # Refer to README.md Task 2.6 for details
+        
         config = {
             "configurable": {
-                "thread_id": # TODO: Set this to the session id of the current sessions
-                "llm": # TODO Set this to the LLM instance (self.llm)
-                "tools": # TODO Set this to the list of tools
+                "thread_id": self.current_session.session_id,
+                "llm": self.llm ,
+                "tools": self.tools
             }
         }
 

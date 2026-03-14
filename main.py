@@ -3,6 +3,8 @@ import sys
 from datetime import datetime
 from dotenv import load_dotenv
 from print_color import print
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
@@ -53,7 +55,7 @@ def main():
     """Main interactive loop"""
     # Load environment variables
     load_dotenv()
-
+    
     # Get API key
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
