@@ -14,6 +14,38 @@ Given the user input and conversation history, classify the user's intent into o
 - calculation: Mathematical operations or numerical computations. Or questions about documents that may require calculations
 - unknown: Cannot determine the intent clearly
 
+User: "What is the total contract value for CON-001?" → qa
+User: "What are the payment terms for INV-001" → qa
+User: "summarise contract CON-001" → summarization
+User: "Provide key items for INV-001" → summarization
+User: " What's the total products for invoice INV-002" → calculation
+User: "Calculate total of all Insurance claims" → calculation
+User: "Summarize all" → unknown
+User: "Do the thing" → unknown
+
+Confidence Scoring (0.0 - 1.0):
+  High confidence (0.85 - 1.0):
+    - The request is clear and unambiguous and maps to a single category.
+    - Key signals are present ( "summarize", "total", "what does X say").
+    - Conversation history, if present, confirms the intent.
+
+  Medium confidence (0.5 - 0.84):
+    - The request likely belongs to a category but has some ambiguity.
+    - Multiple interpretations are possible but one is more probable.
+    - The input is informal but fits a category.
+
+  Low confidence (0.0 - 0.49):
+    - The request is vague, contradictory, or could equally fit multiple categories.
+    - Critical context is missing and cannot be inferred from history.
+    - Assign this range when defaulting to "unknown".
+
+  Ambiguous cases:
+    - If the request spans two categories ("summarize and total the invoices"),
+      pick the dominant intent and lower confidence to the medium range.
+    - If conversation history resolves the ambiguity, you may raise confidence
+      accordingly and note this in your reasoning.
+    - Never assign confidence above 0.7 when classifying as "unknown".
+
 User Input: {user_input}
 
 Recent Conversation History:

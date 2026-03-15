@@ -77,7 +77,7 @@ def create_calculator_tool(logger: ToolLogger):
             result = eval(cleaned_expression, {"__builtins__": {}}, {})
 
         except Exception as e:
-            error_msg = f"Error searching documents: {str(e)}"
+            error_msg = f"Math calculation error: {str(e)}"
             logger.log_tool_use(
                 "calculator",
                 {"expression": expression},
@@ -93,7 +93,7 @@ def create_calculator_tool(logger: ToolLogger):
                 },
                 {"result": result}
             )
-        return result
+        return str(result)
     return calculator
 
 

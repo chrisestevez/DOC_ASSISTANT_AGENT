@@ -222,8 +222,8 @@ def create_workflow(llm, tools, debug:bool=False):
         should_continue,
         {
             "qa":"qa_agent",
-            "summarization_agent":"summarization_agent",
-            "calculation_agent":"calculation_agent" ,
+            "summarization":"summarization_agent",
+            "calculation":"calculation_agent" ,
             "unknown":"qa_agent",
             "end": END 
         }
